@@ -1,0 +1,48 @@
+# IDE/Editor specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-*
+
+# Go specific
+/bin/
+/pkg/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go workspace specific
+go.work
+go.work.sum
+
+# Build output
+/vendor/
+/dist/
+
+# Debugging files
+*.log
+debug
+
+# macOS specific
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Test coverage
+coverage.txt
+coverage.html
+/cover/
+
+# Environment variables
+.env
+.env.local
+
+# Binaries compiled from the project
+/streambridge
