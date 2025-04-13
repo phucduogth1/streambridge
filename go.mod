@@ -3,8 +3,12 @@ module github.com/phucduogth1/streambridge
 go 1.24.1
 
 require (
+	github.com/ccxt/ccxt/go/v4 v4.4.73
+	github.com/gorilla/websocket v1.5.0
+)
+
+require (
 	github.com/bits-and-blooms/bitset v1.13.0 // indirect
-	github.com/ccxt/ccxt/go/v4 v4.4.73 // indirect
 	github.com/consensys/bavard v0.1.13 // indirect
 	github.com/consensys/gnark-crypto v0.12.1 // indirect
 	github.com/crate-crypto/go-ipa v0.0.0-20240223125850-b1e8a79f509c // indirect
@@ -14,7 +18,6 @@ require (
 	github.com/ethereum/go-ethereum v1.14.13 // indirect
 	github.com/ethereum/go-verkle v0.1.1-0.20240829091221-dffa7562dbe9 // indirect
 	github.com/google/uuid v1.6.0 // indirect
-	github.com/gorilla/websocket v1.5.0 // indirect
 	github.com/holiman/uint256 v1.3.1 // indirect
 	github.com/mitchellh/mapstructure v1.4.1 // indirect
 	github.com/mmcloughlin/addchain v0.4.0 // indirect

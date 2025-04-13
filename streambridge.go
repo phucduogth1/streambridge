@@ -3,6 +3,7 @@ package streambridge
 import (
 	"context"
 	"log"
+	"strings"
 	"time"
 
 	ccxt "github.com/ccxt/ccxt/go/v4"
@@ -11,7 +12,8 @@ import (
 
 // StreamBridge represents the main struct for the enhanced CCXT package
 type StreamBridge struct {
-	exchange ccxt.Binance
+	exchange  ccxt.Binance
+	isTestnet bool
 }
 
 // OrderBookUpdate represents the structure for order book WebSocket updates
@@ -38,8 +40,19 @@ type TradeUpdate struct {
 
 // NewStreamBridge creates a new instance of StreamBridge
 func NewStreamBridge(exchange ccxt.Binance) *StreamBridge {
+	// Check if testnet is enabled in the exchange options
+	isTestnet := false
+	if options := exchange.GetOptions(); options != nil {
+		if testOption, ok := options["test"]; ok {
+			if testBool, ok := testOption.(bool); ok && testBool {
+				isTestnet = true
+			}
+		}
+	}
+
 	return &StreamBridge{
-		exchange: exchange,
+		exchange:  exchange,
+		isTestnet: isTestnet,
 	}
 }
 
@@ -81,7 +94,15 @@ func (s *StreamBridge) WatchOrderBook(symbol string) (chan OrderBookUpdate, func
 
 		backoff := 5 * time.Second
 		maxBackoff := 5 * time.Minute
-		url := "wss://ws-fapi.binance.com/ws/" + symbol + "@depth"
+
+		// Try a different URL format that's also mentioned in Binance docs
+		var url string
+		if s.isTestnet {
+			url = "wss://testnet.binancefuture.com/ws/" + strings.ToLower(symbol) + "@depth"
+		} else {
+			url = "wss://fstream.binance.com/ws/" + strings.ToLower(symbol) + "@depth"
+		}
+		log.Printf("Connecting to OrderBook WebSocket URL: %s", url)
 
 		for {
 			select {
@@ -153,7 +174,15 @@ func (s *StreamBridge) WatchTrades(symbol string) (chan TradeUpdate, func()) {
 
 		backoff := 5 * time.Second
 		maxBackoff := 5 * time.Minute
-		url := "wss://ws-fapi.binance.com/ws/" + symbol + "@trade"
+
+		// Try a different URL format that's also mentioned in Binance docs
+		var url string
+		if s.isTestnet {
+			url = "wss://testnet.binancefuture.com/ws/" + strings.ToLower(symbol) + "@trade"
+		} else {
+			url = "wss://fstream.binance.com/ws/" + strings.ToLower(symbol) + "@trade"
+		}
+		log.Printf("Connecting to Trades WebSocket URL: %s", url)
 
 		for {
 			select {
