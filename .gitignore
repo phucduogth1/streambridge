@@ -1,14 +1,8 @@
-# IDE/Editor specific files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-*.sublime-*
+# Build artifacts
+/bin/
+/dist/
 
 # Go specific
-/bin/
-/pkg/
 *.exe
 *.exe~
 *.dll
@@ -16,33 +10,33 @@
 *.dylib
 *.test
 *.out
+/go.work
 
-# Go workspace specific
-go.work
-go.work.sum
+# Go workspace output (different from your /pkg source directory)
+# Note: Do NOT ignore your project's pkg/ directory as it contains source code
+# That's why we use more specific paths below
+/pkg/mod/
+/pkg/sumdb/
+/pkg/dep/
 
-# Build output
-/vendor/
-/dist/
-
-# Debugging files
-*.log
-debug
-
-# macOS specific
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
 .DS_Store
-.AppleDouble
-.LSOverride
-._*
 
-# Test coverage
-coverage.txt
-coverage.html
-/cover/
-
-# Environment variables
+# Local development files
 .env
 .env.local
+/tmp/
+
+# Test and coverage related
+/cover/
+/coverage/
+coverage.txt
+coverage.html
 
 # Binaries compiled from the project
 /streambridge
