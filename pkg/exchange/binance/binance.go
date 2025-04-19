@@ -48,8 +48,9 @@ func (b *BinanceExchange) IsTestnet() bool {
 
 // BinanceStreamBridge is the main implementation of StreamBridge for Binance
 type BinanceStreamBridge struct {
-	exchange  *BinanceExchange
-	providers map[types.MarketType]types.StreamProvider
+	exchange     *BinanceExchange
+	providers    map[types.MarketType]types.StreamProvider
+	userProvider types.UserDataProvider
 }
 
 // NewBinanceStreamBridge creates a new Binance stream bridge
@@ -73,12 +74,26 @@ func (b *BinanceStreamBridge) GetStreamProvider(marketType types.MarketType) (ty
 	return provider, nil
 }
 
+// GetUserDataProvider returns the user data provider if available
+func (b *BinanceStreamBridge) GetUserDataProvider() (types.UserDataProvider, error) {
+	if b.userProvider == nil {
+		return nil, errors.New("user data provider not available")
+	}
+	return b.userProvider, nil
+}
+
 // GetSupportedMarketTypes returns all market types supported by this exchange
 func (b *BinanceStreamBridge) GetSupportedMarketTypes() []types.MarketType {
 	keys := make([]types.MarketType, 0, len(b.providers))
 	for k := range b.providers {
 		keys = append(keys, k)
 	}
+
+	// Add UserData if available
+	if b.userProvider != nil {
+		keys = append(keys, types.UserData)
+	}
+
 	return keys
 }
 
@@ -113,4 +128,9 @@ func (b *BinanceStreamBridge) GetCcxtExchange() interface{} {
 // RegisterProvider registers a stream provider for a specific market type
 func (b *BinanceStreamBridge) RegisterProvider(marketType types.MarketType, provider types.StreamProvider) {
 	b.providers[marketType] = provider
+}
+
+// RegisterUserDataProvider registers a user data provider
+func (b *BinanceStreamBridge) RegisterUserDataProvider(provider types.UserDataProvider) {
+	b.userProvider = provider
 }

@@ -37,6 +37,10 @@ func (f *StreamBridgeFactory) CreateForBinance(exchange ccxt.Binance) (types.Str
 	spotProvider := spot.NewBinanceSpotProvider(binanceExchange)
 	streamBridge.RegisterProvider(types.Spot, spotProvider)
 
+	// Register the futures user data provider (replaces the old userdata provider)
+	userDataProvider := futures.NewFuturesUserDataProvider(binanceExchange)
+	streamBridge.RegisterUserDataProvider(userDataProvider)
+
 	return streamBridge, nil
 }
 
